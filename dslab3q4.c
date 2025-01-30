@@ -1,178 +1,81 @@
 #include <stdio.h>
 
-void selectsortevenidx(int *B, int N)
+void combinesort(int *A, int st, int mid, int ed)
 {
 
-    int L = 0;
-
-    if (N % 2 == 0)
-    {
-
-        L = N / 2;
-    }
-    else
-    {
-
-        L = N / 2 + 1;
-    }
-
-    int A[L];
+    int i, j;
+    i = st;
+    j = mid + 1;
     int y = 0;
+    int temp[ed - st + 1];
 
-    for (int i = 0; i < N; i++)
+    while (i <= mid && j <= ed)
     {
-        if (i % 2 == 0)
+        if (A[i] <= A[j])
         {
-
-            A[y] = B[i];
+            temp[y] = A[i];
             y++;
+            i++;
         }
-    }
-
-    for (int i = 0; i < L - 1; i++)
-    {
-        int min = i;
-        for (int j = i + 1; j < L; j++)
+        else
         {
-            if (A[j] < A[min])
-            {
-                min = j;
-            }
-        }
-        int te = A[i];
-        A[i] = A[min];
-        A[min] = te;
-    }
-
-    int x = 0;
-    for (int i = 0; i < N; i++)
-    {
-        if (i % 2 == 0)
-        {
-
-            B[i] = A[x];
-            x++;
-        }
-    }
-
-    printf("even idx sort \n");
-    for (int i = 0; i < N; i++)
-    {
-        printf("%d ", B[i]);
-    }
-    printf("\n");
-}
-void selectsortoddidx(int *C, int N)
-{
-
-    int L = 0;
-
-    if (N % 2 == 0)
-    {
-
-        L = N / 2;
-    }
-    else
-    {
-
-        L = N / 2 + 1;
-    }
-
-    int A[L];
-    int y = 0;
-
-    for (int i = 0; i < N; i++)
-    {
-        if (i % 2 != 0)
-        {
-
-            A[y] = C[i];
+            temp[y] = A[j];
             y++;
+            j++;
         }
     }
 
-    for (int i = 0; i < L - 1; i++)
+    while (i <= mid)
     {
-        int min = i;
-        for (int j = i + 1; j < L; j++)
-        {
-            if (A[j] < A[min])
-            {
-                min = j;
-            }
-        }
-        int te = A[i];
-        A[i] = A[min];
-        A[min] = te;
+        temp[y] = A[i];
+        y++;
+        i++;
+    }
+    while (j <= ed)
+    {
+        temp[y] = A[j];
+        y++;
+        j++;
     }
 
-    int x = 0;
-    for (int i = 0; i < N; i++)
+    for (int idx = 0; idx < ed - mid + 1; idx++)
     {
-        if (i % 2 != 0)
-        {
-
-            C[i] = A[x];
-            x++;
-        }
+        A[idx + st] = temp[idx];
     }
-
-    printf("odd idx sort \n");
-    for (int i = 0; i < N; i++)
-    {
-        printf("%d ", C[i]);
-    }
-    printf("\n");
 }
 
-void selectionsort(int *D, int N)
+void mergesort(int *A, int st, int ed)
 {
-    for (int i = 0; i < N - 1; i++)
+    if (st < ed)
     {
-        int min = i;
-        for (int j = i + 1; j < N; j++)
-        {
-            if (D[min] > D[j])
-            {
-                min = j;
-            }
-        }
-        int temp = D[i];
-        D[i] = D[min];
-        D[min] = temp;
-    }
+        int mid = st + (ed - st) / 2;
 
-    printf("sorted array \n");
-    for (int i = 0; i < N; i++)
-    {
-        printf("%d ", D[i]);
+        mergesort(A, st, mid);
+        mergesort(A, mid + 1, ed);
+        combinesort(A, st, mid, ed);
     }
-    printf("\n");
 }
-
 int main()
 {
+
     int N;
-    
-    printf("Enter the number of elements in the array: ");
+    printf("Enter the number of elements in array: ");
     scanf("%d", &N);
-    
-    
-    int B[N];
-    int C[N];
-    int D[N];
+    int A[N];
 
-
+    printf("Enter the elements of array:\n");
     for (int i = 0; i < N; i++)
     {
-        printf("Enter element no.%d: ", i);
-        scanf("%d", &B[i]);
-        C[i] = B[i];
-        D[i] = B[i];
+        printf("Element %d: ", i + 1);
+        scanf("%d", &A[i]);
     }
 
-    selectsortevenidx(B, N);
-    selectsortoddidx(C, N);
-    selectionsort(D, N);
+    mergesort(A, 0, N - 1);
+
+    printf("Sorted array is:\n");
+    for (int i = 0; i < N; i++)
+    {
+        printf("%d ", A[i]);
+    }
     return 0;
 }
