@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+    int data;
+    struct node *next;
+    struct node *prev;
+} Node;
+
+Node *creation_node(int el)
+{
+    Node *new_node = (Node *)malloc(sizeof(Node));
+    if (new_node != NULL)
+    {
+        new_node->data = el;
+        new_node->next = NULL;
+        new_node->prev = NULL;
+    }
+    else
+    {
+        printf("Memory allocation failed\n");
+    }
+    return new_node;
+}
+
+void combine_nodes(Node **head, int el)
+{
+    Node *new_node = creation_node(el);
+    if (*head == NULL)
+    {
+        *head = new_node;
+    }
+    else
+    {
+        Node *temp = *head;
+        while (temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+        temp->next = new_node;
+        new_node->prev = temp;
+    }
+}
+
+void print_list(Node *head)
+{
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+void print_list_reverse(Node *head)
+{
+    Node *temp = head;
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    while (temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->prev;
+    }
+    printf("\n");
+}
+
+Node *return_tail(Node *head)
+{
+    Node *temp = head;
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    return temp;
+}
+
+
+
+void Number_of_elements(int N)
+{
+    Node *head = NULL;
+    for (int i = 0; i < N; i++)
+    {
+        printf("Enter element no.%d: ", i + 1);
+        int el;
+        scanf("%d", &el);
+        combine_nodes(&head, el);
+        printf("Created node %d\n", i + 1);
+    }
+    print_list(head);
+    printf("List in reverse order: ");
+    print_list_reverse(head);
+
+  
+
+
+ 
+}
+
+int main()
+{
+    int N;
+    printf("Enter the number of nodes you want to create: ");
+    scanf("%d", &N);
+    Number_of_elements(N);
+
+    return 0;
+}
